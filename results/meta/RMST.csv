@@ -1,0 +1,7 @@
+"critere","analyse","tau","k","diff_RMST","IC_inf","IC_sup","p","I2","etudes","tau_raccourci","exclues_suivi_court"
+"OS","ITT",36,2,2.136,-19.102,23.374,0.423,42.327,"Dong, Ethun","",""
+"OS","AT",36,9,2.633,-1,6.266,0.133,77.515,"Breuer, Dong, Ethun, Giuseppucci, Hidalgo, Iwatsuki, Pichlmayr, Poletto, Robles","Giuseppucci (34.5 m)",""
+"RFS","AT",36,4,6.634,3.104,10.164,0.009,34.177,"Breuer, Dong, Giuseppucci, Poletto","Giuseppucci (35.9 m)",""
+"OS","ITT",60,2,4.391,-35.553,44.334,0.396,46.208,"Dong, Ethun","",""
+"OS","AT",60,8,4.609,-2.074,11.291,0.147,74.554,"Breuer, Dong, Ethun, Hidalgo, Iwatsuki, Pichlmayr, Poletto, Robles","Pichlmayr (59.6 m)","Giuseppucci"
+"RFS","AT",60,3,11.474,-0.145,23.092,0.051,52.389,"Breuer, Dong, Poletto","","Giuseppucci"

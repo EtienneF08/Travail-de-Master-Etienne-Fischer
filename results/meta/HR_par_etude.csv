@@ -1,0 +1,40 @@
+"analyse","etude","n_LT","n_LR","ev_LT","ev_LR","logHR","se","p_PH","HR","IC_inf","IC_sup"
+"OS ITT - principal (Dong + Ethun Fig 4A)","Dong",127,288,77,159,-0.105,0.139,0.704,0.9,0.685,1.182
+"OS ITT - principal (Dong + Ethun Fig 4A)","Ethun",66,58,34,52,-0.939,0.23,0.007,0.391,0.249,0.613
+"OS ITT - sensibilité sans Ethun","Dong",127,288,77,159,-0.105,0.139,0.704,0.9,0.685,1.182
+"OS ITT - sensibilité Croome au lieu de Dong","Croome",90,142,47,87,-0.264,0.181,0.983,0.768,0.539,1.095
+"OS ITT - sensibilité Croome au lieu de Dong","Ethun",66,58,34,52,-0.939,0.23,0.007,0.391,0.249,0.613
+"OS AT - principal","Breuer",120,106,60,88,-0.693,0.169,0,0.5,0.359,0.696
+"OS AT - principal","Dong",75,207,28,91,-0.48,0.217,0.031,0.619,0.405,0.946
+"OS AT - principal","Ethun",41,191,15,182,-1.716,0.274,0.024,0.18,0.105,0.307
+"OS AT - principal","Giuseppucci",23,82,6,72,-1.649,0.43,0.46,0.192,0.083,0.446
+"OS AT - principal","Hidalgo",12,44,9,25,0.015,0.395,0.71,1.016,0.468,2.202
+"OS AT - principal","Iwatsuki",27,34,17,31,-0.364,0.305,0.001,0.695,0.382,1.265
+"OS AT - principal","Pichlmayr",25,125,21,91,0.355,0.243,0.838,1.426,0.886,2.296
+"OS AT - principal","Poletto",46,60,22,34,-0.382,0.275,0.574,0.682,0.398,1.169
+"OS AT - principal","Robles",11,29,9,29,-1.335,0.512,0.001,0.263,0.096,0.717
+"OS AT - sensibilité Croome au lieu de Dong","Breuer",120,106,60,88,-0.693,0.169,0,0.5,0.359,0.696
+"OS AT - sensibilité Croome au lieu de Dong","Croome",54,99,19,49,-0.428,0.27,0.592,0.652,0.384,1.107
+"OS AT - sensibilité Croome au lieu de Dong","Ethun",41,191,15,182,-1.716,0.274,0.024,0.18,0.105,0.307
+"OS AT - sensibilité Croome au lieu de Dong","Giuseppucci",23,82,6,72,-1.649,0.43,0.46,0.192,0.083,0.446
+"OS AT - sensibilité Croome au lieu de Dong","Hidalgo",12,44,9,25,0.015,0.395,0.71,1.016,0.468,2.202
+"OS AT - sensibilité Croome au lieu de Dong","Iwatsuki",27,34,17,31,-0.364,0.305,0.001,0.695,0.382,1.265
+"OS AT - sensibilité Croome au lieu de Dong","Pichlmayr",25,125,21,91,0.355,0.243,0.838,1.426,0.886,2.296
+"OS AT - sensibilité Croome au lieu de Dong","Poletto",46,60,22,34,-0.382,0.275,0.574,0.682,0.398,1.169
+"OS AT - sensibilité Croome au lieu de Dong","Robles",11,29,9,29,-1.335,0.512,0.001,0.263,0.096,0.717
+"OS AT - sensibilité sans Robles","Breuer",120,106,60,88,-0.693,0.169,0,0.5,0.359,0.696
+"OS AT - sensibilité sans Robles","Dong",75,207,28,91,-0.48,0.217,0.031,0.619,0.405,0.946
+"OS AT - sensibilité sans Robles","Ethun",41,191,15,182,-1.716,0.274,0.024,0.18,0.105,0.307
+"OS AT - sensibilité sans Robles","Giuseppucci",23,82,6,72,-1.649,0.43,0.46,0.192,0.083,0.446
+"OS AT - sensibilité sans Robles","Hidalgo",12,44,9,25,0.015,0.395,0.71,1.016,0.468,2.202
+"OS AT - sensibilité sans Robles","Iwatsuki",27,34,17,31,-0.364,0.305,0.001,0.695,0.382,1.265
+"OS AT - sensibilité sans Robles","Pichlmayr",25,125,21,91,0.355,0.243,0.838,1.426,0.886,2.296
+"OS AT - sensibilité sans Robles","Poletto",46,60,22,34,-0.382,0.275,0.574,0.682,0.398,1.169
+"RFS AT - principal","Breuer",120,106,69,89,-0.836,0.163,0.455,0.433,0.315,0.596
+"RFS AT - principal","Dong",75,207,39,123,-0.431,0.184,0.297,0.65,0.453,0.932
+"RFS AT - principal","Giuseppucci",23,82,6,61,-1.465,0.429,0.905,0.231,0.1,0.536
+"RFS AT - principal","Poletto",46,50,20,28,-0.654,0.297,0.631,0.52,0.29,0.931
+"RFS AT - sensibilité Croome au lieu de Dong","Breuer",120,106,69,89,-0.836,0.163,0.455,0.433,0.315,0.596
+"RFS AT - sensibilité Croome au lieu de Dong","Croome",54,99,22,54,-0.437,0.253,0.986,0.646,0.393,1.061
+"RFS AT - sensibilité Croome au lieu de Dong","Giuseppucci",23,82,6,61,-1.465,0.429,0.905,0.231,0.1,0.536
+"RFS AT - sensibilité Croome au lieu de Dong","Poletto",46,50,20,28,-0.654,0.297,0.631,0.52,0.29,0.931
