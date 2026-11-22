@@ -44,8 +44,14 @@ cat("One-stage Cox stratifié : HR =", round(one_stage[1], 2), "[", round(one_st
     round(one_stage[3], 2), "], p =", signif(one_stage[4], 3), "\n")
 
 # 3. Two-stage REML + HK (pour information) et forest plot
-ma <- forest_harmonise(par_etude, one_stage, "results/meta/OS_ITT_ALL.png")
-print(ma)
+fh <- forest_harmonise(par_etude, one_stage, "results/meta/OS_ITT_ALL.png")
+print(fh$ma)
+cat("\n===== Forest plot : effet poolé et hétérogénéité =====\n")
+local({ op <- options(width = 200); on.exit(options(op))
+        print(data.frame(analyse = nom, k = nrow(par_etude),
+             `HR [IC95]` = sprintf("%.2f [%.2f, %.2f]", fh$pool["HR"], fh$pool["inf"], fh$pool["sup"]),
+             `p effet` = sub("^p (= )?", "", fmt_p(fh$pool["p"])), `I2` = sprintf("%.0f %%", fh$ma$I2),
+             `p Q` = sub("^p (= )?", "", fmt_p(fh$ma$QEp)), check.names = FALSE), row.names = FALSE, right = FALSE) })
 
 # 4. One-stage avec effet aléatoire (coxme), pour information
 d$lt <- as.numeric(d$groupe == "LT")

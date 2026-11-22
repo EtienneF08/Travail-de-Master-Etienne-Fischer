@@ -23,6 +23,7 @@ analyses_2 <- list(
   "RFS AT - principal 2" = list(critere = "RFS", analyse = "AT", etudes = c("Dong", "Breuer", "Giuseppucci"))
 )
 
+tab_forest <- list()
 for (nom in names(analyses_2)) {
   a <- analyses_2[[nom]]
   d <- ipd %>% filter(critere == a$critere, analyse == a$analyse, etude %in% a$etudes)
@@ -39,7 +40,15 @@ for (nom in names(analyses_2)) {
   cat("One-stage Cox stratifié : HR =", round(one_stage[1], 2), "[", round(one_stage[2], 2), ";",
       round(one_stage[3], 2), "], p =", signif(one_stage[4], 3), "\n")
 
-  ma <- forest_harmonise(par_etude, one_stage,
+  fh <- forest_harmonise(par_etude, one_stage,
                          file.path("results/meta", paste0(gsub("[^A-Za-z0-9]+", "_", nom), ".png")))
-  print(ma)
+  print(fh$ma)
+  tab_forest[[nom]] <- data.frame(analyse = nom, k = nrow(par_etude),
+               `HR [IC95]` = sprintf("%.2f [%.2f, %.2f]", fh$pool["HR"], fh$pool["inf"], fh$pool["sup"]),
+               `p effet` = sub("^p (= )?", "", fmt_p(fh$pool["p"])), `I2` = sprintf("%.0f %%", fh$ma$I2),
+               `p Q` = sub("^p (= )?", "", fmt_p(fh$ma$QEp)), check.names = FALSE)
 }
+
+cat("\n===== Forest plots : effet poolé et hétérogénéité =====\n")
+local({ op <- options(width = 200); on.exit(options(op))
+        print(bind_rows(tab_forest), row.names = FALSE, right = FALSE) })

@@ -46,13 +46,19 @@ par(mar = c(7, 4, 1, 2))
 fp <- forest(ma, atransf = exp, refline = 0, addfit = FALSE, xlab = "HR (LT vs LR + VR)",
              alim = range(AXE_AT), at = AXE_AT, xlim = c(-8, 5), cex.axis = 0.75,
              rows = (k + 2):3, ylim = c(0.5, k + 5),
-             header = c("Étude", "HR [IC 95 %]"))
+             header = c("Study", "HR [95% CI]"))
 abline(h = 2)
-addpoly(log(one_stage[1]), ci.lb = log(one_stage[2]), ci.ub = log(one_stage[3]),
-        rows = 1, atransf = exp, mlab = "One-stage (Cox stratifié)", cex = fp$cex)
-p_q <- if (ma$QEp < 0.001) "< 0.001" else sprintf("= %.3f", ma$QEp)
-mtext(sprintf("Hétérogénéité : I² = %.0f %% ; τ² = %.3f ; p (test Q) %s", ma$I2, ma$tau2, p_q),
-      side = 1, line = 5.5, cex = 0.9)
+# Même présentation que forest_harmonise() : HR [IC]; p sur la ligne du losange,
+# « Effet poolé » puis « Hétérogénéité » sous la figure
+fmt_p <- function(p) if (p < 0.001) "p < 0.001" else sprintf("p = %.3f", p)
+addpoly(log(one_stage[1]), ci.lb = log(one_stage[2]), ci.ub = log(one_stage[3]), annotate = FALSE,
+        rows = 1, atransf = exp, mlab = "One-stage (stratified Cox)", cex = fp$cex)
+text(fp$xlim[2], 1, sprintf("%.2f [%.2f, %.2f]; %s", one_stage[1], one_stage[2], one_stage[3],
+                            fmt_p(one_stage[4])), pos = 2, cex = fp$cex)
+mtext(sprintf("Pooled effect: %s", fmt_p(one_stage[4])), side = 1, line = 4.8, cex = 0.9)
+mtext(sprintf("Heterogeneity: I² = %.0f%%; τ² = %.3f; p (Q test) %s",
+              ma$I2, ma$tau2, sub("^p ", "", fmt_p(ma$QEp))),
+      side = 1, line = 5.9, cex = 0.9)
 dev.off()
 
 print(within(par_etude, { logHR <- NULL; se <- NULL }), digits = 3)
@@ -60,3 +66,10 @@ cat(sprintf("\nOne-stage (Cox stratifié) : HR = %.2f [%.2f-%.2f], p = %.2g\n",
             one_stage[1], one_stage[2], one_stage[3], one_stage[4]))
 cat(sprintf("Two-stage (REML, HK, 1 ddl) : HR = %.2f [%.2f-%.2f] ; I2 = %.0f %%, tau2 = %.3f, p(Q) = %.3f\n",
             exp(ma$b), exp(ma$ci.lb), exp(ma$ci.ub), ma$I2, ma$tau2, ma$QEp))
+
+cat("\n===== Forest plot : effet poolé et hétérogénéité =====\n")
+print(data.frame(analyse = "OS AT - LT vs LR + VR", k = k,
+                 `HR [IC95]` = sprintf("%.2f [%.2f, %.2f]", one_stage[1], one_stage[2], one_stage[3]),
+                 `p effet` = sub("^p (= )?", "", fmt_p(one_stage[4])), `I2` = sprintf("%.0f %%", ma$I2),
+                 `p Q` = sub("^p (= )?", "", fmt_p(ma$QEp)), check.names = FALSE),
+      row.names = FALSE, right = FALSE)

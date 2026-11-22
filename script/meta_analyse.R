@@ -74,26 +74,37 @@ forest_harmonise <- function(par_etude, one_stage, fichier) {
   fp <- forest(ma, atransf = exp, refline = 0, addfit = FALSE, xlab = "HR (LT vs LR)",
                alim = range(AXE_AT), at = AXE_AT, xlim = c(-8, 5), cex.axis = 0.75,
                rows = (k + 2):3, ylim = c(0.5, k + 5),
-               header = c("Étude", "HR [IC 95 %]"))
+               header = c("Study", "HR [95% CI]"))
   abline(h = 2)
+  # Estimation poolée affichée : k = 2 -> one-stage (p du coefficient groupe du Cox stratifié),
+  # k >= 3 -> two-stage (ma$pval, REML + HK). L'annotation HR [IC]; p est écrite à la main
   if (k == 2) {
-    addpoly(log(one_stage[1]), ci.lb = log(one_stage[2]), ci.ub = log(one_stage[3]),
-            rows = 1, atransf = exp, mlab = "One-stage (Cox stratifié)", cex = fp$cex)
+    pool <- c(HR = one_stage[[1]], inf = one_stage[[2]], sup = one_stage[[3]], p = one_stage[[4]])
+    addpoly(log(pool["HR"]), ci.lb = log(pool["inf"]), ci.ub = log(pool["sup"]), annotate = FALSE,
+            rows = 1, atransf = exp, mlab = "One-stage (stratified Cox)", cex = fp$cex)
   } else {
-    addpoly(ma, row = 1, atransf = exp, mlab = "Two-stage effets aléatoires (REML, HK)", cex = fp$cex)
+    pool <- c(HR = exp(ma$b[1]), inf = exp(ma$ci.lb), sup = exp(ma$ci.ub), p = ma$pval)
+    addpoly(ma, row = 1, atransf = exp, annotate = FALSE,
+            mlab = "Two-stage random effects (REML, HK)", cex = fp$cex)
   }
-  p_q <- if (ma$QEp < 0.001) "< 0.001" else sprintf("= %.3f", ma$QEp)
-  mtext(sprintf("Hétérogénéité : I² = %.0f %% ; τ² = %.3f ; p (test Q) %s", ma$I2, ma$tau2, p_q),
-        side = 1, line = 5.5, cex = 0.9)
+  text(fp$xlim[2], 1, sprintf("%.2f [%.2f, %.2f]; %s", pool["HR"], pool["inf"], pool["sup"], fmt_p(pool["p"])),
+       pos = 2, cex = fp$cex)
+  mtext(sprintf("Pooled effect: %s", fmt_p(pool["p"])), side = 1, line = 4.8, cex = 0.9)
+  mtext(sprintf("Heterogeneity: I² = %.0f%%; τ² = %.3f; p (Q test) %s",
+                ma$I2, ma$tau2, sub("^p ", "", fmt_p(ma$QEp))),
+        side = 1, line = 5.9, cex = 0.9)
   dev.off()
-  ma
+  list(ma = ma, pool = pool)
 }
+# p à 3 décimales, « p < 0.001 » si inférieur
+fmt_p <- function(p) if (p < 0.001) "p < 0.001" else sprintf("p = %.3f", p)
 
 # ---------------------------------------------------------------------
 # Boucle sur toutes les analyses
 # ---------------------------------------------------------------------
 resume <- list()
 hr_etudes <- list()
+tab_forest <- list()
 for (nom in names(analyses)) {
   a <- analyses[[nom]]
   d <- ipd %>% filter(critere == a$critere, analyse == a$analyse, etude %in% a$etudes)
@@ -117,13 +128,25 @@ for (nom in names(analyses)) {
   #    Le tableau garde les deux méthodes pour toutes les analyses ; pour k = 2, HK n'a
   #    qu'un degré de liberté (IC très larges) : le forest plot montre alors le one-stage
   if (k >= 2) {
-    ma <- forest_harmonise(par_etude, one_stage,
+    fh <- forest_harmonise(par_etude, one_stage,
       file.path("results/meta", paste0(gsub("[^A-Za-z0-9]+", "_", chartr("éèêàç", "eeeac", nom)), ".png")))
+    ma <- fh$ma
     print(ma)
+    tab_forest[[nom]] <- data.frame(
+      analyse = nom, k = k,
+      `HR [IC95]` = sprintf("%.2f [%.2f, %.2f]", fh$pool["HR"], fh$pool["inf"], fh$pool["sup"]),
+      `p effet` = sub("^p (= )?", "", fmt_p(fh$pool["p"])),
+      `I2` = sprintf("%.0f %%", ma$I2),
+      `p Q` = sub("^p (= )?", "", fmt_p(ma$QEp)), check.names = FALSE)
     two_stage <- c(exp(ma$b), exp(ma$ci.lb), exp(ma$ci.ub), ma$pval, ma$I2, ma$tau2)
   } else {
     cat("Une seule étude : pas de pooling, on rapporte son HR.\n")
     two_stage <- c(par_etude$HR, par_etude$IC_inf, par_etude$IC_sup, NA, NA, NA)
+    tab_forest[[nom]] <- data.frame(
+      analyse = nom, k = k,
+      `HR [IC95]` = sprintf("%.2f [%.2f, %.2f]", one_stage[1], one_stage[2], one_stage[3]),
+      `p effet` = sub("^p (= )?", "", fmt_p(one_stage[4])),
+      `I2` = "-", `p Q` = "-", check.names = FALSE)
   }
 
   # 4. One-stage avec effet aléatoire de l'effet traitement si k >= 3
@@ -153,6 +176,11 @@ for (nom in names(analyses)) {
     IC_sup_1stage_RE = one_stage_re[3], tau2_1stage_RE = one_stage_re[4],
     PH_violee = paste(par_etude$etude[par_etude$p_PH < 0.05], collapse = ", "))
 }
+
+# Récapitulatif des forest plots (estimation poolée affichée sur chaque figure)
+cat("\n===== Forest plots : effet poolé et hétérogénéité =====\n")
+local({ op <- options(width = 200); on.exit(options(op))
+         print(bind_rows(tab_forest), row.names = FALSE, right = FALSE) })
 
 tableau <- bind_rows(resume)
 tableau_aff <- tableau %>% mutate(across(where(is.numeric), ~ round(.x, 3)))
